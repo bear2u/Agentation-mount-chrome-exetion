@@ -62,60 +62,46 @@ function IconButton({ label, selected, disabled, onClick, children }: {
   );
 }
 
-function Dialog({ title, labelledBy, returnFocusRef, children, onClose }: {
+export function Dialog({ title, labelledBy, returnFocusRef, children, onClose }: {
   title: string;
   labelledBy: string;
   returnFocusRef: React.RefObject<HTMLElement | null>;
   children: React.ReactNode;
   onClose: () => void;
 }) {
-  const dialogRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   useLayoutEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
+
+    // A page's native modal makes ordinary document content inert. Opening the
+    // annotation UI as its own modal gives its controls a valid focus scope.
+    if (!dialog.open) dialog.showModal();
     const focusable = dialog.querySelector<HTMLElement>('textarea, select, button:not([disabled])');
     focusable?.focus();
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        onClose();
-        return;
-      }
-      if (event.key !== 'Tab') return;
-      const items = Array.from(dialog.querySelectorAll<HTMLElement>('textarea, select, button:not([disabled])'));
-      if (!items.length) return;
-      const first = items[0];
-      const last = items[items.length - 1];
-      const root = dialog.getRootNode();
-      const activeElement = root instanceof ShadowRoot ? root.activeElement : document.activeElement;
-      if (event.shiftKey && activeElement === first) {
-        event.preventDefault();
-        last?.focus();
-      } else if (!event.shiftKey && activeElement === last) {
-        event.preventDefault();
-        first?.focus();
-      }
+    const onCancel = (event: Event) => {
+      event.preventDefault();
+      onClose();
     };
-    dialog.addEventListener('keydown', onKeyDown);
+    dialog.addEventListener('cancel', onCancel);
     return () => {
-      dialog.removeEventListener('keydown', onKeyDown);
+      dialog.removeEventListener('cancel', onCancel);
+      if (dialog.open) dialog.close();
       returnFocusRef.current?.focus();
     };
   }, [onClose, returnFocusRef]);
 
   return (
-    <div className="dialog-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
-      <div ref={dialogRef} className="dialog" role="dialog" aria-modal="true" aria-labelledby={labelledBy}>
-        <div className="dialog-heading">
-          <div>
-            <p className="dialog-eyebrow">선택한 요소</p>
-            <h2 id={labelledBy}>{title}</h2>
-          </div>
-          <IconButton label="닫기" onClick={onClose}><XIcon /></IconButton>
+    <dialog ref={dialogRef} className="dialog" aria-labelledby={labelledBy}>
+      <div className="dialog-heading">
+        <div>
+          <p className="dialog-eyebrow">선택한 요소</p>
+          <h2 id={labelledBy}>{title}</h2>
         </div>
-        {children}
+        <IconButton label="닫기" onClick={onClose}><XIcon /></IconButton>
       </div>
-    </div>
+      {children}
+    </dialog>
   );
 }
 

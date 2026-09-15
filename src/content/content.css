@@ -181,19 +181,12 @@ button:disabled { opacity: 0.42; cursor: not-allowed; }
   white-space: nowrap;
 }
 
-.dialog-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 5;
-  display: grid;
-  align-items: end;
-  justify-items: end;
-  padding: var(--lens-space-5);
-  background: var(--lens-backdrop);
-  pointer-events: auto;
-}
-
 .dialog {
+  position: fixed;
+  right: var(--lens-space-5);
+  bottom: var(--lens-space-5);
+  left: auto;
+  margin: 0;
   display: grid;
   width: min(26rem, calc(100vw - (var(--lens-space-5) * 2)));
   gap: var(--lens-space-3);
@@ -204,6 +197,8 @@ button:disabled { opacity: 0.42; cursor: not-allowed; }
   border-radius: var(--lens-radius-md);
   box-shadow: var(--lens-shadow);
 }
+
+.dialog::backdrop { background: var(--lens-backdrop); }
 
 .dialog-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--lens-space-3); }
 .dialog-eyebrow { margin: 0 0 var(--lens-space-1); color: var(--lens-primary); font-size: 0.6875rem; font-weight: 800; letter-spacing: 0.1em; }
@@ -236,8 +231,7 @@ textarea::placeholder { color: var(--lens-muted); }
 @media (max-width: 42rem) {
   .toolbar { right: var(--lens-space-2); bottom: var(--lens-space-2); left: var(--lens-space-2); overflow-x: auto; }
   .toolbar-brand span, .toolbar-divider { display: none; }
-  .dialog-backdrop { padding: var(--lens-space-2); }
-  .dialog { width: 100%; }
+  .dialog { right: var(--lens-space-2); bottom: var(--lens-space-2); width: calc(100% - (var(--lens-space-2) * 2)); }
 }
 
 @media (prefers-color-scheme: light) {
