@@ -1,4 +1,4 @@
-import { annotationsToMarkdown, createFullPath, createSelector, describeAccessibility } from './element-context';
+import { annotationsToMarkdown, captureRegion, createFullPath, createSelector, describeAccessibility } from './element-context';
 import type { Annotation } from './types';
 
 describe('element context', () => {
@@ -56,5 +56,19 @@ describe('annotationsToMarkdown', () => {
     expect(output).toContain('주석 수: 2');
     expect(output.indexOf('#first')).toBeLessThan(output.indexOf('#buy'));
     expect(output).toContain('```css\ndisplay: block;\n```');
+  });
+
+  it('records a dragged screen region as an annotation with its exact coordinates', () => {
+    document.title = '영역 테스트';
+    const annotation = captureRegion(
+      { x: 120, y: 340, width: 280, height: 160 },
+      '이 카드 묶음의 여백을 줄여주세요.',
+      'high',
+    );
+
+    expect(annotation.targetType).toBe('region');
+    expect(annotation.element).toBe('드래그 영역');
+    expect(annotation.boundingBox).toEqual({ x: 120, y: 340, width: 280, height: 160 });
+    expect(annotationsToMarkdown([annotation])).toContain('위치: x=120, y=340, width=280, height=160');
   });
 });

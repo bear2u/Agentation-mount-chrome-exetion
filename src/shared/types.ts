@@ -23,6 +23,8 @@ export interface Annotation {
   boundingBox: Box;
   accessibility: string;
   computedStyles: string;
+  /** Missing on annotations saved before area-selection support. */
+  targetType?: 'element' | 'region';
 }
 
 export type ContentMessage =

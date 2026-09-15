@@ -1,4 +1,4 @@
-import type { Annotation, Priority } from './types';
+import type { Annotation, Box, Priority } from './types';
 
 const STYLE_PROPERTIES = [
   'display',
@@ -175,6 +175,38 @@ export function captureElement(element: HTMLElement, comment: string, priority: 
     },
     accessibility: describeAccessibility(element),
     computedStyles: describeComputedStyles(element),
+    targetType: 'element',
+  };
+}
+
+export function captureRegion(region: Box, comment: string, priority: Priority): Annotation {
+  const boundingBox = {
+    x: Math.round(region.x),
+    y: Math.round(region.y),
+    width: Math.round(region.width),
+    height: Math.round(region.height),
+  };
+  const viewportX = boundingBox.x - window.scrollX + boundingBox.width / 2;
+  const viewportY = boundingBox.y - window.scrollY + boundingBox.height / 2;
+  const anchor = document.elementFromPoint(viewportX, viewportY);
+  const anchorElement = anchor instanceof HTMLElement ? anchor : null;
+
+  return {
+    id: crypto.randomUUID(),
+    url: location.href,
+    pageTitle: document.title,
+    createdAt: Date.now(),
+    comment: comment.trim(),
+    priority,
+    element: '드래그 영역',
+    selector: `영역(x=${boundingBox.x}, y=${boundingBox.y}, width=${boundingBox.width}, height=${boundingBox.height})`,
+    fullPath: anchorElement ? createFullPath(anchorElement) : '(영역 중심의 DOM 요소를 찾지 못함)',
+    cssClasses: anchorElement ? Array.from(anchorElement.classList).join(' ') : '',
+    nearbyText: anchorElement ? normalizeText(anchorElement.textContent) : '사용자가 드래그한 화면 영역',
+    boundingBox,
+    accessibility: 'role=region; name="사용자가 드래그한 화면 영역"',
+    computedStyles: `selection-area: ${boundingBox.width}px × ${boundingBox.height}px;`,
+    targetType: 'region',
   };
 }
 

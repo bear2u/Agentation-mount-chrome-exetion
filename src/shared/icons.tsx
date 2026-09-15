@@ -41,3 +41,7 @@ export function XIcon(props: IconProps) {
 export function CheckIcon(props: IconProps) {
   return <svg {...baseProps} {...props}><path d="m20 6-11 11-5-5"/></svg>;
 }
+
+export function AreaSelectIcon(props: IconProps) {
+  return <svg {...baseProps} {...props}><rect x="4" y="4" width="16" height="16" rx="2" strokeDasharray="3 2"/><path d="M9 9h6v6H9z"/></svg>;
+}

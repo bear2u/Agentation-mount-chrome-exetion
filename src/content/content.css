@@ -82,6 +82,27 @@ button, textarea, select { font: inherit; }
   white-space: nowrap;
 }
 
+.region-selection-box {
+  position: fixed;
+  z-index: 1;
+  background: var(--lens-highlight-fill);
+  border: 0.125rem dashed var(--lens-highlight);
+  box-shadow: 0 0 0 0.0625rem var(--lens-canvas);
+  pointer-events: none;
+}
+
+.region-selection-box > span {
+  position: absolute;
+  bottom: 100%;
+  left: -0.125rem;
+  padding: var(--lens-space-1) var(--lens-space-2);
+  color: var(--lens-on-primary);
+  background: var(--lens-primary);
+  border-radius: var(--lens-space-1) var(--lens-space-1) 0 0;
+  font: 700 0.6875rem/1.4 var(--lens-font);
+  white-space: nowrap;
+}
+
 .annotation-marker {
   position: fixed;
   z-index: 2;

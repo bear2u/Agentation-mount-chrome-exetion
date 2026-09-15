@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Component Lens region selection harness</title>
+    <script>
+      window.chrome = {
+        runtime: { onMessage: { addListener() {} } },
+        storage: { local: { async get() { return {}; }, async set() {} } }
+      };
+    </script>
+  </head>
+  <body>
+    <main>
+      <h1>영역 선택 테스트</h1>
+      <section style="width: 520px; padding: 48px; background: #dfe9ff; border-radius: 16px;">
+        <h2>드래그할 카드 영역</h2>
+        <p>여러 요소를 한 번에 포함하는 주석을 남깁니다.</p>
+        <button type="button">테스트 버튼</button>
+      </section>
+    </main>
+    <script src="/dist/content.js"></script>
+  </body>
+</html>
