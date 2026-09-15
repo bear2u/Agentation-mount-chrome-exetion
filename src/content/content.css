@@ -196,6 +196,7 @@ button:disabled { opacity: 0.42; cursor: not-allowed; }
   border: 0.0625rem solid var(--lens-border);
   border-radius: var(--lens-radius-md);
   box-shadow: var(--lens-shadow);
+  pointer-events: auto;
 }
 
 .dialog::backdrop { background: var(--lens-backdrop); }
