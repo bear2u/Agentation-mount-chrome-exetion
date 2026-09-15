@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Component Lens",
+  "description": "웹 화면의 요소를 선택하고 AI 작업용 주석 문맥을 복사합니다.",
+  "version": "0.1.1",
+  "permissions": ["activeTab", "scripting", "storage", "clipboardWrite"],
+  "action": {
+    "default_title": "Component Lens 열기",
+    "default_popup": "popup.html"
+  }
+}

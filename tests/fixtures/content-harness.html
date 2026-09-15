@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Component Lens content script harness</title>
+    <script>
+      window.chrome = {
+        runtime: { onMessage: { addListener() {} } },
+        storage: { local: { async get() { return {}; }, async set() {} } }
+      };
+    </script>
+  </head>
+  <body>
+    <main>
+      <h1>일반 HTML 테스트 페이지</h1>
+      <button id="plain-button" type="button">테스트 버튼</button>
+    </main>
+    <script src="/dist/content.js"></script>
+  </body>
+</html>
