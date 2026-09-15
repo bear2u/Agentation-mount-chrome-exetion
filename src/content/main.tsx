@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { captureElement } from '../shared/element-context';
 import { LensApp } from './LensApp';
+import { placeHostInTopLayer } from './top-layer';
 import styles from './content.css?inline';
 
 declare global {
@@ -18,7 +19,7 @@ function mountLens(): void {
   const host = document.createElement('div');
   host.id = 'component-lens-extension-root';
   host.setAttribute('data-component-lens-root', '');
-  document.documentElement.append(host);
+  placeHostInTopLayer(host);
 
   const shadow = host.attachShadow({ mode: 'open' });
   const sheet = document.createElement('style');
@@ -42,7 +43,12 @@ function mountLens(): void {
     />,
   );
 
-  window.__componentLens = { open: () => openRequest() };
+  window.__componentLens = {
+    open: () => {
+      placeHostInTopLayer(host);
+      openRequest();
+    },
+  };
 
   chrome.runtime.onMessage.addListener((message: { type?: string }) => {
     if (message.type === 'COMPONENT_LENS_OPEN' || message.type === 'COMPONENT_LENS_TOGGLE') {
